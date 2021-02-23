@@ -1,7 +1,6 @@
 package lex
 
 import (
-	"bytes"
 	"fmt"
 	"strings"
 )
@@ -95,18 +94,6 @@ func (n *Node) Init() {
 	n.adv()
 }
 
-func (n Node) numRun() string {
-
-	num := bytes.Buffer{}
-	for !strings.ContainsAny(n.curChar, "\n"+ADD+SUB+DIV+MULT) {
-		fmt.Println(strings.ContainsAny(n.curChar, "\n"+ADD+SUB+DIV+MULT))
-		num.WriteString(n.curChar)
-		n.adv()
-	}
-
-	return num.String()
-}
-
 //////////////////////////
 
 func (n Node) build() []string {
@@ -129,9 +116,27 @@ func (n Node) build() []string {
 			trueS = append(trueS, DIV)
 			n.adv()
 		} else if strings.ContainsAny(n.curChar, NUMS) {
-			trueS = append(trueS, n.numRun())
+
+			num := ""
+
+			for !strings.ContainsAny(n.curChar, " "+ADD+MULT+DIV+SUB) {
+
+				num = num + n.curChar
+				n.adv()
+
+				if n.curChar == "\n" {
+					break
+				}
+				// fmt.Printf("Source: %s\tpos: %d\tcurChar: %s\tnum: %s\n", n.Source, n.pos, n.curChar, num)
+				//				fmt.Println(!strings.Contains(n.curChar, " \n"+ADD+MULT+DIV+SUB))
+			}
+
+			trueS = append(trueS, num)
+
 		}
 	}
+	//for testing:
+	//fmt.Println(trueS[0])
 	return trueS
 }
 
