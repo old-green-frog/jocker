@@ -27,6 +27,16 @@ func (el element) String() string {
 	return fmt.Sprintf("%s: %s", el.elType, el.elValue)
 }
 
+//optional
+func removeEl(s []element, i int) []element {
+
+	copy(s[i:], s[i+1:])
+	s[len(s)-1] = element{}
+	s = s[:len(s)-1]
+
+	return s
+}
+
 ///////////////////
 //NODES
 
@@ -169,6 +179,8 @@ func (n Node) build() []element {
 func (n Node) String() string {
 	return fmt.Sprintf("%v", n.build())
 }
+
+//for future.....
 
 // res, err := strconv.Atoi(intString)
 // if err != nil {
