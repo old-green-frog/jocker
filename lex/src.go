@@ -175,3 +175,9 @@ func (n Node) String() string {
 // 	panic(err)
 // }
 // fmt.Printf("Parsed integer: %d\n", res)
+
+// resFloat, err := strconv.ParseFloat(floatString, 32)
+// if err != nil {
+// 	panic(err)
+// }
+// fmt.Printf("Parsed float: %.5f\n", resFloat)
