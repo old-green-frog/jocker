@@ -169,3 +169,9 @@ func (n Node) build() []element {
 func (n Node) String() string {
 	return fmt.Sprintf("%v", n.build())
 }
+
+// res, err := strconv.Atoi(intString)
+// if err != nil {
+// 	panic(err)
+// }
+// fmt.Printf("Parsed integer: %d\n", res)
