@@ -16,6 +16,20 @@ const (
 	DOT  = "."
 )
 
+//////////////////
+//ELEMENTS
+type element struct {
+	elType  string
+	elValue string
+}
+
+func (el element) String() string {
+	return fmt.Sprintf("%s: %s", el.elType, el.elValue)
+}
+
+///////////////////
+//NODES
+
 type Node struct {
 	Source  string
 	pos     int
@@ -96,31 +110,38 @@ func (n *Node) Init() {
 
 //////////////////////////
 
-func (n Node) build() []string {
+func (n Node) build() []element {
 
-	var trueS []string
+	var trueS []element
 
 	for n.curChar != "\n" {
 		if strings.ContainsAny(n.curChar, "       ") {
 			n.adv()
 		} else if strings.ContainsAny(n.curChar, ADD) {
-			trueS = append(trueS, ADD)
+			trueS = append(trueS, element{"ADD", ADD})
 			n.adv()
 		} else if strings.ContainsAny(n.curChar, SUB) {
-			trueS = append(trueS, SUB)
+			trueS = append(trueS, element{"SUB", SUB})
 			n.adv()
 		} else if strings.ContainsAny(n.curChar, MULT) {
-			trueS = append(trueS, MULT)
+			trueS = append(trueS, element{"MULT", MULT})
 			n.adv()
 		} else if strings.ContainsAny(n.curChar, DIV) {
-			trueS = append(trueS, DIV)
+			trueS = append(trueS, element{"DIV", DIV})
 			n.adv()
 		} else if strings.ContainsAny(n.curChar, NUMS) {
 
 			num := ""
+			dotCount := 0
 
 			for !strings.ContainsAny(n.curChar, " "+ADD+MULT+DIV+SUB) {
 
+				if n.curChar == DOT {
+					if dotCount == 1 {
+						break
+					}
+					dotCount++
+				}
 				num = num + n.curChar
 				n.adv()
 
@@ -131,7 +152,12 @@ func (n Node) build() []string {
 				//				fmt.Println(!strings.Contains(n.curChar, " \n"+ADD+MULT+DIV+SUB))
 			}
 
-			trueS = append(trueS, num)
+			// trueS = append(trueS, element{"NUM", num})
+			if dotCount == 1 {
+				trueS = append(trueS, element{"FL", num})
+			} else {
+				trueS = append(trueS, element{"INT", num})
+			}
 
 		}
 	}
