@@ -28,14 +28,36 @@ func (el element) String() string {
 }
 
 //optional
-func removeEl(s []element, i int) []element {
+// func removeEl(s []element, i int) []element {
 
-	copy(s[i:], s[i+1:])
-	s[len(s)-1] = element{}
-	s = s[:len(s)-1]
+// 	copy(s[i:], s[i+1:])
+// 	s[len(s)-1] = element{}
+// 	s = s[:len(s)-1]
 
-	return s
-}
+// 	return s
+// }
+
+// func getInt(str string) int {
+
+// 	res, err := strconv.Atoi(str)
+
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	return res
+// }
+
+// func getFl(str string) float32 {
+
+// 	resFloat, err := strconv.ParseFloat(str, 32)
+
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	return float32(resFloat)
+// }
 
 ///////////////////
 //NODES
@@ -72,47 +94,6 @@ func (n *Node) Init() {
 	// 		continue
 	// 	} else if strings.ContainsAny(string(value), NUMS) {
 
-	// 		// makeNum := func() string {
-	// 		// 	numT := ""
-	// 		// 	dotCount := 0
-
-	// 		// 	for string(value) == io.EOF.Error() && strings.ContainsAny(string(value), NUMS+DOT) {
-	// 		// 		if string(value) == DOT {
-	// 		// 			if dotCount == 1 {
-	// 		// 				break
-	// 		// 			}
-	// 		// 			dotCount++
-	// 		// 			numT += DOT
-	// 		// 		} else {
-	// 		// 			numT += string(value)
-	// 		// 		}
-	// 		// 	}
-	// 		// 	fmt.Println(numT)
-	// 		// 	return numT
-	// 		// }
-
-	// 		numT := ""
-	// 		dotCount := 0
-	// 		for string(value) != io.EOF.Error() && strings.ContainsAny(string(value), NUMS+DOT) {
-	// 			if string(value) == DOT {
-	// 				if dotCount == 1 {
-	// 					break
-	// 				}
-	// 				dotCount++
-	// 				numT += DOT
-	// 			} else {
-	// 				numT += string(value)
-	// 			}
-	// 			continue
-	// 		}
-
-	// 		n.TrueS = append(n.TrueS, numT)
-
-	// 	} else if strings.ContainsAny(string(value), ADD+SUB+DIV+MULT) {
-	// 		n.TrueS = append(n.TrueS, string(value))
-	// 	}
-	//}
-
 	n.pos = -1
 	n.curChar = "\n"
 	n.adv()
@@ -147,8 +128,8 @@ func (n Node) build() []element {
 			for !strings.ContainsAny(n.curChar, " "+ADD+MULT+DIV+SUB) {
 
 				if n.curChar == DOT {
-					if dotCount == 1 {
-						break
+					if dotCount >= 1 {
+						return []element{{"ERROR", "To many dots!"}}
 					}
 					dotCount++
 				}
@@ -158,11 +139,8 @@ func (n Node) build() []element {
 				if n.curChar == "\n" {
 					break
 				}
-				// fmt.Printf("Source: %s\tpos: %d\tcurChar: %s\tnum: %s\n", n.Source, n.pos, n.curChar, num)
-				//				fmt.Println(!strings.Contains(n.curChar, " \n"+ADD+MULT+DIV+SUB))
 			}
 
-			// trueS = append(trueS, element{"NUM", num})
 			if dotCount == 1 {
 				trueS = append(trueS, element{"FL", num})
 			} else {
@@ -175,6 +153,46 @@ func (n Node) build() []element {
 	//fmt.Println(trueS[0])
 	return trueS
 }
+
+// func (n Node) run() string {
+
+// 	src := n.build()
+// 	var res interface{}
+// 	var trueRes interface{}
+
+// 	for in, el := range src {
+
+// 		if strings.ContainsAny(el.elType, "INT"+"FL") {
+// 			continue
+// 		} else {
+// 			switch el.elType {
+
+// 			case "ADD":
+// 				{
+// 					if src[in-1].elType == "FL" {
+// 						if src[in+1].elType == "FL" {
+// 							res = getFl(src[in+1].elValue) + getFl(src[in-1].elValue)
+// 						} else {
+// 							res = float32(getInt(src[in+1].elValue)) + getFl(src[in-1].elValue)
+// 						}
+// 					} else {
+// 						if src[in+1].elType == "FL" {
+// 							res = getFl(src[in+1].elValue) + float32(getInt(src[in-1].elValue))
+// 						} else {
+// 							res = getInt(src[in+1].elValue) + getInt(src[in-1].elValue)
+// 						}
+// 					}
+// 				}
+
+// 			}
+// 			src = removeEl(src, in+1)
+// 			src = removeEl(src, in)
+// 			src = removeEl(src, in-1)
+
+// 		}
+// 	}
+// 	return fmt.Sprintf("%v", res)
+// }
 
 func (n Node) String() string {
 	return fmt.Sprintf("%v", n.build())
