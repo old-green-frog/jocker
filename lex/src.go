@@ -27,38 +27,6 @@ func (el element) String() string {
 	return fmt.Sprintf("%s: %s", el.elType, el.elValue)
 }
 
-//optional
-// func removeEl(s []element, i int) []element {
-
-// 	copy(s[i:], s[i+1:])
-// 	s[len(s)-1] = element{}
-// 	s = s[:len(s)-1]
-
-// 	return s
-// }
-
-// func getInt(str string) int {
-
-// 	res, err := strconv.Atoi(str)
-
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	return res
-// }
-
-// func getFl(str string) float32 {
-
-// 	resFloat, err := strconv.ParseFloat(str, 32)
-
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	return float32(resFloat)
-// }
-
 ///////////////////
 //NODES
 
@@ -92,7 +60,6 @@ func (n *Node) Init() {
 	// for _, value := range n.Source {
 	// 	if strings.ContainsAny(string(value), " ") {
 	// 		continue
-	// 	} else if strings.ContainsAny(string(value), NUMS) {
 
 	n.pos = -1
 	n.curChar = "\n"
@@ -104,6 +71,7 @@ func (n *Node) Init() {
 func (n Node) build() []element {
 
 	var trueS []element
+	err := error{}
 
 	for n.curChar != "\n" {
 		if strings.ContainsAny(n.curChar, "       ") {
@@ -129,7 +97,7 @@ func (n Node) build() []element {
 
 				if n.curChar == DOT {
 					if dotCount >= 1 {
-						return []element{{"ERROR", "To many dots!"}}
+						return []element{err.genErr("To many dots!")}
 					}
 					dotCount++
 				}
