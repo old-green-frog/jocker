@@ -1,6 +1,7 @@
 package lex
 
 import (
+	"fmt"
 	"strconv"
 )
 
@@ -71,4 +72,80 @@ func (p *pars) insert(el element, ind int) {
 	// copy(ss[i+1:], ss[i:])
 	// ss[i] = s
 	// return ss
+}
+
+////////////////////////
+////IMPORTANT PART OF PARSER
+////////////////////////
+func (p pars) consNum(s *string, ind int, dst string, t string) {
+
+	switch dst {
+	case "ADD":
+		if t == "INT" {
+			res := getInt(p.toks[ind-1].elValue) + getInt(p.toks[ind+1].elValue)
+			if *s != "" {
+				*s = fmt.Sprintf("%d", getInt(*s)+getInt(p.toks[ind+1].elValue))
+			} else {
+				*s = fmt.Sprintf("%d", res)
+			}
+		} else if t == "FL" {
+			res := getFl(p.toks[ind-1].elValue) + getFl(p.toks[ind+1].elValue)
+			if *s != "" {
+				*s = fmt.Sprintf("%f", getFl(*s)+getFl(p.toks[ind+1].elValue))
+			} else {
+				*s = fmt.Sprintf("%f", res)
+			}
+		}
+
+	case "SUB":
+		if t == "INT" {
+			res := getInt(p.toks[ind-1].elValue) - getInt(p.toks[ind+1].elValue)
+			if *s != "" {
+				*s = fmt.Sprintf("%d", getInt(*s)-getInt(p.toks[ind+1].elValue))
+			} else {
+				*s = fmt.Sprintf("%d", res)
+			}
+		} else if t == "FL" {
+			res := getFl(p.toks[ind-1].elValue) - getFl(p.toks[ind+1].elValue)
+			if *s != "" {
+				*s = fmt.Sprintf("%f", getFl(*s)-getFl(p.toks[ind+1].elValue))
+			} else {
+				*s = fmt.Sprintf("%f", res)
+			}
+		}
+
+	case "MULT":
+		if t == "INT" {
+			res := getInt(p.toks[ind-1].elValue) * getInt(p.toks[ind+1].elValue)
+			if *s != "" {
+				*s = fmt.Sprintf("%d", getInt(*s)*getInt(p.toks[ind+1].elValue))
+			} else {
+				*s = fmt.Sprintf("%d", res)
+			}
+		} else if t == "FL" {
+			res := getFl(p.toks[ind-1].elValue) * getFl(p.toks[ind+1].elValue)
+			if *s != "" {
+				*s = fmt.Sprintf("%f", getFl(*s)*getFl(p.toks[ind+1].elValue))
+			} else {
+				*s = fmt.Sprintf("%f", res)
+			}
+		}
+
+	case "DIV":
+		if t == "INT" {
+			res := getInt(p.toks[ind-1].elValue) / getInt(p.toks[ind+1].elValue)
+			if *s != "" {
+				*s = fmt.Sprintf("%d", getInt(*s)/getInt(p.toks[ind+1].elValue))
+			} else {
+				*s = fmt.Sprintf("%d", res)
+			}
+		} else if t == "FL" {
+			res := getFl(p.toks[ind-1].elValue) / getFl(p.toks[ind+1].elValue)
+			if *s != "" {
+				*s = fmt.Sprintf("%f", getFl(*s)/getFl(p.toks[ind+1].elValue))
+			} else {
+				*s = fmt.Sprintf("%f", res)
+			}
+		}
+	}
 }

@@ -1,7 +1,6 @@
 package lex
 
 import (
-	"fmt"
 	"strconv"
 )
 
@@ -29,13 +28,7 @@ func (p *pars) parse() element {
 			{
 				if p.toks[in-1].elType == "FL" || p.toks[in+1].elType == "FL" {
 
-					res := getFl(p.toks[in-1].elValue) * getFl(p.toks[in+1].elValue)
-
-					if huh != "" {
-						huh = fmt.Sprintf("%f", getFl(huh)*getFl(p.toks[in+1].elValue))
-					} else {
-						huh = fmt.Sprintf("%f", res)
-					}
+					p.consNum(&huh, in, "MULT", "FL")
 					// fmt.Println(p.toks, " M")
 					p.toks = removeEl(p.toks, in+1)
 					p.toks = removeEl(p.toks, in-1)
@@ -46,13 +39,7 @@ func (p *pars) parse() element {
 
 				} else if p.toks[in-1].elType == "INT" && p.toks[in+1].elType == "INT" {
 
-					res := getInt(p.toks[in-1].elValue) * getInt(p.toks[in+1].elValue)
-
-					if huh != "" {
-						huh = fmt.Sprintf("%d", getInt(huh)*getInt(p.toks[in+1].elValue))
-					} else {
-						huh = fmt.Sprintf("%d", res)
-					}
+					p.consNum(&huh, in, "MULT", "INT")
 					// fmt.Println(p.toks, " M")
 					p.toks = removeEl(p.toks, in+1)
 					p.toks = removeEl(p.toks, in-1)
@@ -77,26 +64,14 @@ func (p *pars) parse() element {
 			{
 				if p.toks[in-1].elType == "FL" || p.toks[in+1].elType == "FL" {
 
-					res := getFl(p.toks[in-1].elValue) + getFl(p.toks[in+1].elValue)
-
-					if huh != "" {
-						huh = fmt.Sprintf("%f", getFl(huh)+getFl(p.toks[in+1].elValue))
-					} else {
-						huh = fmt.Sprintf("%f", res)
-					}
+					p.consNum(&huh, in, "ADD", "FL")
 					// fmt.Println(p.toks, " A")
 					p.toks[in+1] = element{"FL", huh}
 					// fmt.Println(p.toks, " A")
 
 				} else if p.toks[in-1].elType == "INT" && p.toks[in+1].elType == "INT" {
 
-					res := getInt(p.toks[in-1].elValue) + getInt(p.toks[in+1].elValue)
-					// fmt.Println(res)
-					if huh != "" {
-						huh = fmt.Sprintf("%d", getInt(huh)+getInt(p.toks[in+1].elValue))
-					} else {
-						huh = fmt.Sprintf("%d", res)
-					}
+					p.consNum(&huh, in, "ADD", "INT")
 					// fmt.Println(p.toks, " A")
 					p.toks[in+1] = element{"INT", huh}
 					// fmt.Println(p.toks, " A")
@@ -108,26 +83,14 @@ func (p *pars) parse() element {
 			{
 				if p.toks[in-1].elType == "FL" || p.toks[in+1].elType == "FL" {
 
-					res := getFl(p.toks[in-1].elValue) - getFl(p.toks[in+1].elValue)
-
-					if huh != "" {
-						huh = fmt.Sprintf("%f", getFl(huh)-getFl(p.toks[in+1].elValue))
-					} else {
-						huh = fmt.Sprintf("%f", res)
-					}
+					p.consNum(&huh, in, "SUB", "FL")
 					// fmt.Println(p.toks, " S")
 					p.toks[in+1] = element{"FL", huh}
 					// fmt.Println(p.toks, " S")
 
 				} else if p.toks[in-1].elType == "INT" && p.toks[in+1].elType == "INT" {
 
-					res := getInt(p.toks[in-1].elValue) - getInt(p.toks[in+1].elValue)
-
-					if huh != "" {
-						huh = fmt.Sprintf("%d", getInt(huh)-getInt(p.toks[in+1].elValue))
-					} else {
-						huh = fmt.Sprintf("%d", res)
-					}
+					p.consNum(&huh, in, "SUB", "INT")
 					// fmt.Println(p.toks, " S")
 					p.toks[in+1] = element{"INT", huh}
 					// fmt.Println(p.toks, " S")
