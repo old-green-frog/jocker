@@ -122,7 +122,12 @@ func (n Node) build() []element {
 	return trueS
 }
 
-// func (n Node) run() string {
+func (n Node) run() element {
+
+	prs := pars{}
+	prs.toks = n.build()
+	return prs.parse()
+}
 
 // 	src := n.build()
 // 	var res interface{}
@@ -163,19 +168,5 @@ func (n Node) build() []element {
 // }
 
 func (n Node) String() string {
-	return fmt.Sprintf("%v", n.build())
+	return fmt.Sprintf("%v", n.run())
 }
-
-//for future.....
-
-// res, err := strconv.Atoi(intString)
-// if err != nil {
-// 	panic(err)
-// }
-// fmt.Printf("Parsed integer: %d\n", res)
-
-// resFloat, err := strconv.ParseFloat(floatString, 32)
-// if err != nil {
-// 	panic(err)
-// }
-// fmt.Printf("Parsed float: %.5f\n", resFloat)
