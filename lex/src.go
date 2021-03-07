@@ -74,6 +74,7 @@ func (n Node) build() []element {
 	err := error{}
 
 	for n.curChar != "\n" {
+
 		if strings.ContainsAny(n.curChar, "       ") {
 			n.adv()
 		} else if strings.ContainsAny(n.curChar, ADD) {
@@ -115,10 +116,23 @@ func (n Node) build() []element {
 				trueS = append(trueS, element{"INT", num})
 			}
 
+		} else if strings.Contains(n.curChar, "\"") {
+
+			str := ""
+			n.adv()
+
+			for !strings.ContainsAny(n.curChar, "\"") {
+				str = str + n.curChar
+				n.adv()
+			}
+
+			n.adv()
+			trueS = append(trueS, element{"STR", str})
 		}
 	}
 	//for testing:
-	//fmt.Println(trueS[0])
+	// fmt.Println(trueS)
+
 	return trueS
 }
 
@@ -170,3 +184,29 @@ func (n Node) run() element {
 func (n Node) String() string {
 	return fmt.Sprintf("%v", n.run())
 }
+
+////////////////
+////////////////
+////////////////
+///VARIABLES
+////////////////
+////////////////
+////////////////
+
+////////////////
+////////////////
+
+// var stack = make(map[string]element)
+
+// func varDecl(s map[string]element, name string, val interface{}) {
+
+// 	switch tv := val.(type) {
+
+// 	case int:
+// 		s[name] = element{"INT", fmt.Sprintf("%d", tv)}
+// 	case float32:
+// 		s[name] = element{"FL", fmt.Sprintf("%f", tv)}
+// 	case string:
+// 		s[name] = element{"STR", tv}
+// 	}
+// }
