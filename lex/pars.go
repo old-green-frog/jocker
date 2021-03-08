@@ -86,6 +86,8 @@ func (p *pars) parse() element {
 		}
 	}
 
+	huh = ""
+
 	for in, tok := range p.toks {
 
 		switch tok.elType {
@@ -143,14 +145,16 @@ func (p *pars) parse() element {
 
 	}
 
-	_, err := strconv.Atoi(huh)
+	cont := p.toks[len(p.toks)-1].elValue
+
+	_, err := strconv.Atoi(cont)
 	if err != nil {
-		if _, e := strconv.ParseFloat(huh, 32); e == nil {
-			return element{"FL", huh}
+		if _, e := strconv.ParseFloat(cont, 32); e == nil {
+			return element{"FL", cont}
 		} else {
-			return element{"STR", huh}
+			return element{"STR", cont}
 		}
 
 	}
-	return element{"INT", huh}
+	return element{"INT", cont}
 }

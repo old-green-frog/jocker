@@ -8,12 +8,13 @@ import (
 ///////////
 
 const (
-	ADD  = "+"
-	SUB  = "-"
-	MULT = "*"
-	DIV  = "/"
-	NUMS = "0123456789"
-	DOT  = "."
+	ADD     = "+"
+	SUB     = "-"
+	MULT    = "*"
+	DIV     = "/"
+	NUMS    = "0123456789"
+	DOT     = "."
+	LETTERS = "abcdefghijklmnopqrstuvwxyz"
 )
 
 //////////////////
@@ -102,6 +103,7 @@ func (n Node) build() []element {
 					}
 					dotCount++
 				}
+
 				num = num + n.curChar
 				n.adv()
 
@@ -109,6 +111,8 @@ func (n Node) build() []element {
 					break
 				}
 			}
+
+			// fmt.Println(num)
 
 			if dotCount == 1 {
 				trueS = append(trueS, element{"FL", num})
@@ -128,6 +132,45 @@ func (n Node) build() []element {
 
 			n.adv()
 			trueS = append(trueS, element{"STR", str})
+
+			/////vars
+
+		} else if n.curChar == "v" && n.curChar == string(n.Source[0]) {
+
+			brr := ""
+			for n.curChar != " " {
+				// fmt.Println(1)
+				brr = brr + n.curChar
+				n.adv()
+			}
+			n.adv()
+
+			// fmt.Println(brr)
+			if brr == "var" {
+
+				name := ""
+
+				for !strings.ContainsAny(n.curChar, " =") {
+					// fmt.Println(2)
+					name = name + n.curChar
+					n.adv()
+				}
+
+				for !strings.ContainsAny(n.curChar, NUMS) {
+					n.adv()
+				}
+
+				// fmt.Println(n.Source)
+				n.Source = n.Source[n.pos:]
+				n.pos = 0
+				// fmt.Println(n.Source)
+				varDecl(stack, name, n.run())
+				return []element{stack[name]}
+
+			} else {
+				continue
+			}
+
 		}
 	}
 	//for testing:
@@ -196,17 +239,17 @@ func (n Node) String() string {
 ////////////////
 ////////////////
 
-// var stack = make(map[string]element)
+var stack = make(map[string]element)
 
-// func varDecl(s map[string]element, name string, val interface{}) {
+func varDecl(s map[string]element, name string, val interface{}) {
 
-// 	switch tv := val.(type) {
+	rr := error{}
+	switch tv := val.(type) {
 
-// 	case int:
-// 		s[name] = element{"INT", fmt.Sprintf("%d", tv)}
-// 	case float32:
-// 		s[name] = element{"FL", fmt.Sprintf("%f", tv)}
-// 	case string:
-// 		s[name] = element{"STR", tv}
-// 	}
-// }
+	case element:
+		s[name] = element{tv.elType, tv.elValue}
+	default:
+		fmt.Println(rr.genErr("Strange type here"))
+		fmt.Printf("%T: %v\n", val, val)
+	}
+}
