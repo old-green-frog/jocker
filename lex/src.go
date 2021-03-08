@@ -3,6 +3,8 @@ package lex
 import (
 	"fmt"
 	"strings"
+
+	"jocker/pkg"
 )
 
 ///////////
@@ -167,10 +169,49 @@ func (n Node) build() []element {
 				varDecl(stack, name, n.run())
 				return []element{stack[name]}
 
-			} else {
-				continue
 			}
 
+			continue
+
+			///////////func
+
+		} else if n.curChar == "p" && n.curChar == string(n.Source[0]) {
+
+			brr := ""
+			for n.curChar != " " {
+				// fmt.Println(1)
+				brr = brr + n.curChar
+				n.adv()
+			}
+			n.adv()
+
+			if brr == "println" {
+
+				n.Source = n.Source[n.pos:]
+				n.pos = 0
+
+				res := n.run()
+
+				pkg.Println(res.elValue)
+			}
+
+		} else if strings.ContainsAny(n.curChar, LETTERS) {
+
+			word := ""
+
+			for strings.ContainsAny(n.curChar, LETTERS) {
+				word = word + n.curChar
+				n.adv()
+			}
+
+			var cont interface{} = stack[word]
+
+			if el, ok := cont.(element); ok {
+				if elIsEmpty(el) {
+					return []element{{"ERROR", "What?"}}
+				}
+				return []element{el}
+			}
 		}
 	}
 	//for testing:
@@ -225,7 +266,8 @@ func (n Node) run() element {
 // }
 
 func (n Node) String() string {
-	return fmt.Sprintf("%v", n.run())
+	n.run()
+	return ""
 }
 
 ////////////////

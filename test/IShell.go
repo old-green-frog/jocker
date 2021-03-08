@@ -11,6 +11,7 @@ import (
 func main() {
 
 	fmt.Println("Welcome to the IShell!")
+	// pkg.Println("Hello")
 
 	for {
 		fmt.Print("--> ")

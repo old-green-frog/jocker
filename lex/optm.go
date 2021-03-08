@@ -24,6 +24,13 @@ func removeEl(s []element, i int) []element {
 	return s
 }
 
+func elIsEmpty(el element) bool {
+	if el.elValue == "" && el.elType == "" {
+		return true
+	}
+	return false
+}
+
 func getInt(str string) int {
 
 	res, err := strconv.Atoi(str)

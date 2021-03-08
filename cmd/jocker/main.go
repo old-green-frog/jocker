@@ -1,17 +1,31 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
-	"strings"
-	"unicode"
+	"log"
+	"os"
+
+	"jocker/lex"
 )
 
 func main() {
-	f := func(c rune) bool {
-		fmt.Println(!unicode.IsNumber(c), !unicode.IsSymbol(c))
-		return !unicode.IsNumber(c) && !unicode.IsSymbol(c)
+	file, err := os.Open(os.Args[1])
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+
+		node := lex.Node{Source: scanner.Text()}
+		node.Init()
+
+		fmt.Print(node)
 	}
 
-	sr := strings.FieldsFunc("1 + 2", f)
-	fmt.Println(sr)
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
 }
